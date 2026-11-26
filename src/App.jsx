@@ -2,18 +2,64 @@ import { useMemo, useState } from 'react'
 import { calculateEquity, parseCards } from './poker'
 import './App.css'
 
+const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+const suits = [
+  { value: 's', label: '♠' },
+  { value: 'h', label: '♥' },
+  { value: 'd', label: '♦' },
+  { value: 'c', label: '♣' },
+]
+
+const updateCard = (setter, cards, index, field, value) => {
+  setter(cards.map((card, cardIndex) => cardIndex === index ? { ...card, [field]: value } : card))
+}
+
+function CardPicker({ cards, setter, label }) {
+  return (
+    <div className={`card-picker ${label === '보드' ? 'board-picker' : 'hero-picker'}`}>
+      {cards.map((card, index) => (
+        <div className="card-slot" key={`${label}-${index}`}>
+          <select
+            aria-label={`${label} 카드 ${index + 1} 숫자`}
+            value={card.rank}
+            onChange={(event) => updateCard(setter, cards, index, 'rank', event.target.value)}
+            className="rank-select"
+          >
+            <option value="">숫자</option>
+            {ranks.map((rank) => <option key={rank} value={rank}>{rank}</option>)}
+          </select>
+          <select
+            aria-label={`${label} 카드 ${index + 1} 문양`}
+            value={card.suit}
+            onChange={(event) => updateCard(setter, cards, index, 'suit', event.target.value)}
+            className={`suit-select ${card.suit}`}
+          >
+            <option value="">문양</option>
+            {suits.map((suit) => <option key={suit.value} value={suit.value}>{suit.label}</option>)}
+          </select>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function App() {
-  const [hero, setHero] = useState('')
-  const [board, setBoard] = useState('')
+  const [hero, setHero] = useState([{ rank: '', suit: '' }, { rank: '', suit: '' }])
+  const [board, setBoard] = useState(Array.from({ length: 5 }, () => ({ rank: '', suit: '' })))
   const [position, setPosition] = useState('BTN')
   const [opponents, setOpponents] = useState(1)
   const [pot, setPot] = useState(30)
   const [sidePot, setSidePot] = useState(0)
   const [callAmount, setCallAmount] = useState(10)
 
+  const cardString = (cards) => cards
+    .filter((card) => card.rank && card.suit)
+    .map((card) => `${card.rank === '10' ? 'T' : card.rank}${card.suit}`)
+    .join(' ')
+
   const result = useMemo(() => {
-    const heroCards = parseCards(hero)
-    const boardCards = parseCards(board)
+    const heroCards = parseCards(cardString(hero))
+    const boardCards = parseCards(cardString(board))
     if (heroCards.length !== 2 || boardCards.length > 5) return null
     const allCards = [...heroCards, ...boardCards]
     if (new Set(allCards).size !== allCards.length) return null
@@ -38,14 +84,20 @@ function App() {
     <main className="app-shell">
       <header>
         <div><p className="eyebrow">Hold'em Calculator</p><h1>원팟 계산기</h1></div>
-        <button className="reset" onClick={() => { setHero(''); setBoard(''); setPot(30); setSidePot(0); setCallAmount(10) }}>초기화</button>
+        <button className="reset" onClick={() => {
+          setHero([{ rank: '', suit: '' }, { rank: '', suit: '' }])
+          setBoard(Array.from({ length: 5 }, () => ({ rank: '', suit: '' })))
+          setPot(30)
+          setSidePot(0)
+          setCallAmount(10)
+        }}>초기화</button>
       </header>
 
       <section className="card hand-card">
-        <label>내 패<span>예: As Kh 또는 A♠ K♥</span></label>
-        <input value={hero} onChange={(event) => setHero(event.target.value)} placeholder="A♠ K♥" />
-        <label>보드<span>플롭 3 / 턴 4 / 리버 5장</span></label>
-        <input value={board} onChange={(event) => setBoard(event.target.value)} placeholder="T♠ J♠ Q♣" />
+        <label>내 패<span>두 장 선택</span></label>
+        <CardPicker cards={hero} setter={setHero} label="내 패" />
+        <label>보드<span>최대 5장 선택</span></label>
+        <CardPicker cards={board} setter={setBoard} label="보드" />
       </section>
 
       <section className="card controls">
