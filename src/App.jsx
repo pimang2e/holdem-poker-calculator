@@ -83,7 +83,7 @@ function App() {
   return (
     <main className="app-shell">
       <header>
-        <div><p className="eyebrow">Hold'em Calculator</p><h1>원팟 계산기</h1></div>
+        <div><p className="eyebrow">Poker Pro · Hold'em Tools</p><h1>원팟 계산기</h1></div>
         <button className="reset" onClick={() => {
           setHero([{ rank: '', suit: '' }, { rank: '', suit: '' }])
           setBoard(Array.from({ length: 5 }, () => ({ rank: '', suit: '' })))

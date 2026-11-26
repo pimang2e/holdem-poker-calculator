@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">홀덤 원팟 계산기</string>
-    <string name="title_activity_main">홀덤 원팟 계산기</string>
+    <string name="app_name">포커 프로</string>
+    <string name="title_activity_main">포커 프로</string>
     <string name="package_name">kr.poker.holdemcalculator</string>
     <string name="custom_url_scheme">kr.poker.holdemcalculator</string>
 </resources>

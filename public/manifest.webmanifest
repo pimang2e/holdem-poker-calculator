@@ -1,1 +1,17 @@
-{"name":"홀덤 원팟 계산기","short_name":"홀덤계산기","start_url":"/","display":"standalone","background_color":"#eef2f7","theme_color":"#172033","icons":[]}
+{
+  "name": "포커 프로 - 홀덤 계산기",
+  "short_name": "포커 프로",
+  "description": "그린 펠트 테이블 감성의 홀덤 팟오즈 계산기",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071712",
+  "theme_color": "#0b2419",
+  "icons": [
+    {
+      "src": "/poker-pro-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

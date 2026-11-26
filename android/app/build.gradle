@@ -7,8 +7,8 @@ android {
         applicationId "kr.poker.holdemcalculator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,9 +16,28 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    def releaseKeyStore = providers.gradleProperty('pokerProKeyStore').orNull
+    def releaseKeyAlias = providers.gradleProperty('pokerProKeyAlias').orNull
+    def releaseStorePassword = providers.gradleProperty('pokerProStorePassword').orNull
+    def releaseKeyPassword = providers.gradleProperty('pokerProKeyPassword').orNull
+
+    signingConfigs {
+        if (releaseKeyStore && releaseKeyAlias && releaseStorePassword && releaseKeyPassword) {
+            release {
+                storeFile file(releaseKeyStore)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            if (releaseKeyStore && releaseKeyAlias && releaseStorePassword && releaseKeyPassword) {
+                signingConfig signingConfigs.release
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
