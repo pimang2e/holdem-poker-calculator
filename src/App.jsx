@@ -25,7 +25,7 @@ function CardPicker({ cards, setter, label }) {
             onChange={(event) => updateCard(setter, cards, index, 'rank', event.target.value)}
             className="rank-select"
           >
-            <option value="">숫자</option>
+            <option value="">—</option>
             {ranks.map((rank) => <option key={rank} value={rank}>{rank}</option>)}
           </select>
           <select
@@ -34,7 +34,7 @@ function CardPicker({ cards, setter, label }) {
             onChange={(event) => updateCard(setter, cards, index, 'suit', event.target.value)}
             className={`suit-select ${card.suit}`}
           >
-            <option value="">문양</option>
+            <option value="">·</option>
             {suits.map((suit) => <option key={suit.value} value={suit.value}>{suit.label}</option>)}
           </select>
         </div>
